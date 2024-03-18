@@ -15,8 +15,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   Wood.init({
     name: DataTypes.STRING,
-    type: DataTypes.ENUM('softwood', 'exotic wood', 'noble and hardwoods'),
-    hardness: DataTypes.ENUM('tender', 'medium-hard', 'hard')
+    type: {
+      type: DataTypes.ENUM,
+      values: ["softwood", "exotic wood", "noble and hardwoods"],
+    },
+    hardness: {
+      type: DataTypes.ENUM,
+      values: ["tender", "medium-hard", "hard"],
+    }
   }, {
     sequelize,
     modelName: 'Wood',
