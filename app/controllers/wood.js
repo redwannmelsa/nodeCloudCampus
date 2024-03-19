@@ -12,5 +12,16 @@ exports.listWoods = async (req, res) => {
 }
 
 exports.getWoodsByHardness = async (req, res) => {
-  const woods = await Wood.findAll()
+  try {
+    const woods = await Wood.findAll({
+      where: {
+        hardness: req.params.hardness
+      }
+    })
+    res.status(200)
+    res.send(woods)
+  } catch (e) {
+    res.status(400)
+    res.send(e)
+  }
 }
