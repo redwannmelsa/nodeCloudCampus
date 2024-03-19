@@ -10,13 +10,30 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        validate: {
+          notNull: {
+            msg: 'name cannot be null'
+          }
+        }
       },
       type: {
-        type: Sequelize.ENUM('softwood', 'exotic wood', 'noble and hardwoods')
+        type: DataTypes.ENUM,
+        values: ["softwood", "exotic wood", "noble and hardwoods"],
+        validate: {
+          notNull: {
+            msg: 'type cannot be null'
+          }
+        }
       },
       hardness: {
-        type: Sequelize.ENUM('tender', 'medium-hard', 'hard')
+        type: DataTypes.ENUM,
+        values: ["tender", "medium-hard", "hard"],
+        validate: {
+          notNull: {
+            msg: 'hardness cannot be null'
+          }
+        }
       },
       createdAt: {
         allowNull: false,

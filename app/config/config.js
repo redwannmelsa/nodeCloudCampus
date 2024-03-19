@@ -1,11 +1,4 @@
 require('dotenv').config({ path: `${process.cwd()}/.env` })
-// const appRoot = require('app-root-path');
-// const myModule = require(`${appRoot}`);
-
-// console.log(myModule)
-
-
-// console.log(process)
 
 module.exports = {
   "development": {
@@ -13,20 +6,20 @@ module.exports = {
     "password": process.env.DB_PASSWORD,
     "database": process.env.DB_NAME,
     "host": process.env.DB_HOST,
-    "dialect": process.env.DB_DIALECT
+    "dialect": "mysql"
   },
   "test": {
     "username": process.env.DB_USER,
     "password": process.env.DB_PASSWORD,
     "database": process.env.DB_NAME,
     "host": process.env.DB_HOST,
-    "dialect": process.env.DB_DIALECT
+    "dialect": "mysql"
   },
   "production": {
     "username": process.env.DB_USER,
     "password": process.env.DB_PASSWORD,
     "database": process.env.DB_NAME,
     "host": process.env.DB_HOST,
-    "dialect": process.env.DB_DIALECT
+    "dialect": "mysql"
   }
 };
