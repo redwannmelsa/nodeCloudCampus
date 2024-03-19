@@ -17,12 +17,12 @@ exports.signup = async (req, res) => {
           password: hash
         })
         res.status(201)
-        res.send(newUser)
+        res.json(newUser)
       }
     });
   } catch (e) {
     res.status(400)
-    res.send(e)
+    res.json(e)
   }
 }
 
@@ -37,16 +37,18 @@ exports.login = async (req, res) => {
     bcrypt.compare(req.body.password, user.password, (err, bcryptRes) => {
       if (err || !bcryptRes) {
         res.status(401)
-        res.send('Wrong password')
+        res.json({ error: 'Wrong password' })
       } else {
         res.status(200)
-        res.send(jwt.sign(
-          {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-          },
-          'shhhhh'))
+        res.json({
+          jwt: jwt.sign(
+            {
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+            },
+            'shhhhh')
+        })
       }
     })
   }

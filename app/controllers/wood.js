@@ -4,10 +4,10 @@ exports.listWoods = async (req, res) => {
   try {
     const woods = await Wood.findAll()
     res.status(200)
-    res.send(woods)
+    res.json(woods)
   } catch (e) {
     res.status(400)
-    res.send(e)
+    res.json(e)
   }
 }
 
@@ -22,6 +22,6 @@ exports.getWoodsByHardness = async (req, res) => {
     res.send(woods)
   } catch (e) {
     res.status(400)
-    res.send(e)
+    res.json(e)
   }
 }
