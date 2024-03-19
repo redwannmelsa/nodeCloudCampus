@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     firstName: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notNull: {
           msg: 'first name cannot be null'
@@ -24,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     lastName: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notNull: {
           msg: 'last name cannot be null'
@@ -32,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
+      allowNull: false,
       unique: true,
       validate: {
         isEmail: {
@@ -44,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notNull: {
           msg: 'password cannot be null'
