@@ -1,5 +1,4 @@
-const models = require('../models')
-const User = models.User
+const { User } = require('../models')
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -15,10 +14,12 @@ exports.signup = async (req, res) => {
           email: req.body.email,
           password: hash
         })
+        res.status(201)
         res.send(newUser)
       }
     });
   } catch (e) {
+    res.status(400)
     res.send(e)
   }
 }
