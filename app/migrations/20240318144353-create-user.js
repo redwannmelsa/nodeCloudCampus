@@ -11,6 +11,7 @@ module.exports = {
       },
       firstName: {
         type: DataTypes.STRING,
+        notNull: true,
         validate: {
           notNull: {
             msg: 'first name cannot be null'
