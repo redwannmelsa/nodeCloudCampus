@@ -32,7 +32,9 @@ exports.login = async (req, res) => {
 
   if (user == null) {
     res.status(400)
-    res.send('User not found')
+    res.json({
+      error: 'User not found'
+    })
   } else {
     bcrypt.compare(req.body.password, user.password, (err, bcryptRes) => {
       if (err || !bcryptRes) {
