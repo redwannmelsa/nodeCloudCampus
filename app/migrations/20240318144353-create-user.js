@@ -10,31 +10,40 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       firstName: {
-        // allowNull: false,
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         validate: {
-          customValidator(value) {
-            if (value == null) {
-              throw new Error("firstName cannot be null");
-            }
+          notNull: {
+            msg: 'first name cannot be null'
           }
         }
       },
       lastName: {
-        allowNull: false,
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        validate: {
+          notNull: {
+            msg: 'last name cannot be null'
+          }
+        }
       },
       email: {
-        allowNull: true,
+        type: DataTypes.STRING,
         unique: true,
         validate: {
-          isEmail: true
-        },
-        type: Sequelize.STRING
+          isEmail: {
+            msg: 'invalid email'
+          },
+          notNull: {
+            msg: 'email cannot be null'
+          },
+        }
       },
       password: {
-        allowNull: false,
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        validate: {
+          notNull: {
+            msg: 'password cannot be null'
+          }
+        }
       }
     });
   },
