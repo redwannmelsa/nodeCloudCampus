@@ -7,4 +7,8 @@ db.sequelize
   .then(() => console.log("Database connected ..."))
   .catch((err) => console.log(err));
 
+const router = require("./app/routes/index.js");
+//Ajout des routes
+app.use("/api", router);
+
 module.exports = app;
