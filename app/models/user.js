@@ -16,33 +16,39 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     firstName: {
       type: DataTypes.STRING,
-      allowNull: false,
-      // todo
       validate: {
-        customValidator(value) {
-          if (value == null) {
-            throw new Error("firstName cannot be null");
-          }
+        notNull: {
+          msg: 'first name cannot be null'
         }
       }
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: false
+      validate: {
+        notNull: {
+          msg: 'last name cannot be null'
+        }
+      }
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: true,
       unique: true,
       validate: {
         isEmail: {
           msg: 'invalid email'
-        }
+        },
+        notNull: {
+          msg: 'email cannot be null'
+        },
       }
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      validate: {
+        notNull: {
+          msg: 'password cannot be null'
+        }
+      }
     }
   }, {
     sequelize,

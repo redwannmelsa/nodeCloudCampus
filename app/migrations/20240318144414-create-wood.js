@@ -17,14 +17,6 @@ module.exports = {
       },
       hardness: {
         type: Sequelize.ENUM('tender', 'medium-hard', 'hard')
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     });
   },

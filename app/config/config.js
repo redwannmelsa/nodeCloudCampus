@@ -1,11 +1,4 @@
 require('dotenv').config({ path: `${process.cwd()}/.env` })
-// const appRoot = require('app-root-path');
-// const myModule = require(`${appRoot}`);
-
-// console.log(myModule)
-
-
-// console.log(process)
 
 module.exports = {
   "development": {
