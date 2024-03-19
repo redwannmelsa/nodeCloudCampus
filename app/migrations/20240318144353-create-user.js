@@ -44,6 +44,14 @@ module.exports = {
             msg: 'password cannot be null'
           }
         }
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
   },

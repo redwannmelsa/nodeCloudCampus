@@ -34,6 +34,14 @@ module.exports = {
             msg: 'hardness cannot be null'
           }
         }
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
   },
