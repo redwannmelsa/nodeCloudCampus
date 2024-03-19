@@ -10,8 +10,15 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       firstName: {
-        allowNull: false,
-        type: Sequelize.STRING
+        // allowNull: false,
+        type: Sequelize.STRING,
+        validate: {
+          customValidator(value) {
+            if (value == null) {
+              throw new Error("firstName cannot be null");
+            }
+          }
+        }
       },
       lastName: {
         allowNull: false,
