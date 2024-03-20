@@ -1,4 +1,7 @@
 'use strict';
+
+const { DataTypes } = require('sequelize');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -34,6 +37,10 @@ module.exports = {
             msg: 'hardness cannot be null'
           }
         }
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true
       },
       createdAt: {
         allowNull: false,

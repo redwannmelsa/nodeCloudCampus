@@ -42,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'hardness cannot be null'
         }
       }
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   }, {
     sequelize,
