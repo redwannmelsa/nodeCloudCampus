@@ -1,4 +1,5 @@
 const { User } = require('../models')
+require('dotenv').config
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -46,7 +47,7 @@ exports.login = async (req, res) => {
             lastName: user.lastName,
             email: user.email,
           },
-          'shhhhh'))
+          process.env.TOKEN_SECRET))
       }
     })
   }
