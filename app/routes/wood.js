@@ -6,8 +6,8 @@ const woodCtrl = require("../controllers/wood.js")
 const auth = require('../middleware/auth.js')
 const multer = require('../middleware/multer.js')
 
-router.get('/listWoods', auth, woodCtrl.readWoods)
+router.get('/', auth, woodCtrl.readWoods)
 router.get('/byHardness/:hardness', auth, woodCtrl.readWoodsByHardness)
-router.post('/createWood', auth, multer, woodCtrl.createWood)
+router.post('/', auth, multer, woodCtrl.createWood)
 
 module.exports = router;
