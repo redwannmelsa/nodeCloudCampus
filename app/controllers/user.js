@@ -1,4 +1,5 @@
 const { User } = require('../models')
+require('dotenv').config
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
