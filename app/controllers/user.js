@@ -40,7 +40,7 @@ exports.login = async (req, res) => {
               lastName: user.lastName,
               email: user.email,
             },
-            'fozjegonezog')
+            process.env.TOKEN_SECRET)
         })
       }
     }
