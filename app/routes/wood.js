@@ -3,7 +3,7 @@ const router = express();
 
 const woodCtrl = require("../controllers/wood.js");
 
-router.get('/listWoods', woodCtrl.listWoods);
-router.get('/byHardness/:hardness', woodCtrl.getWoodsByHardness)
+router.get('/listWoods', woodCtrl.readWoods);
+router.get('/byHardness/:hardness', woodCtrl.readWoodsByHardness)
 
 module.exports = router;

@@ -3,28 +3,47 @@ const { User } = require('../models')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-exports.signup = async (req, res) => {
+var jwt = require('jsonwebtoken');
+
+exports.createUser = async (req, res) => {
   try {
-    bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
-      if (err) throw new Error('could not encrypt password')
-      else {
-        const newUser = await User.create({
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          email: req.body.email,
-          password: hash
-        })
-        res.status(201)
-        res.send(newUser)
-      }
-    });
+    const newUser = await User.create({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: await bcrypt.hash(req.body.password, saltRounds)
+    })
+    res.status(201).json(newUser)
   } catch (e) {
-    res.status(400)
-    res.send(e)
+    res.status(500).json(e)
   }
 }
 
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
+  try {
+    const user = await User.findOne({ where: { email: req.body.email } });
 
-  res.send('You are logged in')
+    if (user == null) {
+      res.status(404).json({
+        error: 'User not found'
+      })
+    } else {
+      const valid = await bcrypt.compare(req.body.password, user.password)
+      if (!valid) {
+        res.status(401).json({ error: 'Wrong password' })
+      } else {
+        res.status(200).json({
+          jwt: jwt.sign(
+            {
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+            },
+            'fozjegonezog')
+        })
+      }
+    }
+  } catch (e) {
+    res.status(500).json(e)
+  }
 }
