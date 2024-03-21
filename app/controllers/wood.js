@@ -48,10 +48,7 @@ exports.updateWood = async (req, res) => {
 
     if (req.file != null) {
       newPathName = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
-      if (woodToUpdate.image != null) {
-        console.log(woodToUpdate.image.match(/[^\/]+$/)[0])
-        fs.unlink('uploads/' + woodToUpdate.image.match(/[^\/]+$/)[0], err => { if (err) console.log(err) })
-      }
+      deleteImageIfNeeded(woodToUpdate)
     }
 
     woodToUpdate.set({
@@ -73,16 +70,18 @@ exports.deleteWood = async (req, res) => {
     if (woodToDelete == null) {
       res.status(404).json({ error: 'wood not found' })
     } else {
-
-      if (woodToDelete.image != null) {
-        fs.unlink('uploads/' + woodToDelete.image.match(/[^\/]+$/)[0], err => console.log(err))
-      }
-
+      deleteImageIfNeeded(woodToDelete)
       await woodToDelete.destroy()
-      res.status(200).json({ message: 'wood has been deleted' })
+      res.status(204).send()
     }
 
   } catch (e) {
-    res.status(500).json(e)
+    res.status(500).json(woodHateoas.globalWoodHateoas(e.message))
+  }
+}
+
+function deleteImageIfNeeded(wood) {
+  if (wood.image != null) {
+    fs.unlink('uploads/' + wood.image.match(/[^\/]+$/)[0], err => console.log(err))
   }
 }
