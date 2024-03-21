@@ -1,4 +1,6 @@
+const { parse } = require('dotenv')
 const { Wood } = require('../models')
+const fs = require('fs')
 
 exports.readWoods = async (req, res) => {
   try {
@@ -24,8 +26,6 @@ exports.readWoodsByHardness = async (req, res) => {
 
 exports.createWood = async (req, res) => {
   try {
-    console.log(req.body.datas)
-    console.log(req.file)
     const pathname = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
     const newWood = await Wood.create({
       ...JSON.parse(req.body.datas),
@@ -40,12 +40,20 @@ exports.createWood = async (req, res) => {
 exports.updateWood = async (req, res) => {
   try {
     const woodToUpdate = await Wood.findOne({ where: { id: req.params.id } })
+    let newPathName = null
+
+    if (req.file != null) {
+      newPathName = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+      if (woodToUpdate.image != null) {
+        console.log(woodToUpdate.image.match(/[^\/]+$/)[0])
+        fs.unlink('uploads/' + woodToUpdate.image.match(/[^\/]+$/)[0], err => { if (err) console.log(err) })
+      }
+    }
 
     woodToUpdate.set({
-      ...req.body
+      ...JSON.parse(req.body.datas),
+      image: newPathName ? newPathName : woodToUpdate.image
     })
-
-    console.log(woodToUpdate)
 
     await woodToUpdate.save()
     res.status(201).json(woodToUpdate)
