@@ -9,6 +9,7 @@ const multer = require('../middleware/multer.js')
 router.get('/', auth, woodCtrl.readWoods)
 router.get('/byHardness/:hardness', auth, woodCtrl.readWoodsByHardness)
 router.post('/', auth, multer, woodCtrl.createWood)
+router.patch('/:id', multer, woodCtrl.updateWood)
 router.delete('/:id', woodCtrl.deleteWood)
 
 module.exports = router;
