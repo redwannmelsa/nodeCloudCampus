@@ -36,3 +36,19 @@ exports.createWood = async (req, res) => {
     res.status(500).json(e)
   }
 }
+
+exports.deleteWood = async (req, res) => {
+  try {
+    const woodToDelete = Wood.findOne({ where: { id: req.params.id } })
+
+    if (woodToDelete == null) {
+      res.status(404).json({ error: 'wood not found' })
+    } else {
+      await woodToDelete.destroy()
+      res.status(200).json({ message: 'wood has been deleted' })
+    }
+
+  } catch (e) {
+    res.status(500).json(e)
+  }
+}
