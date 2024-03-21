@@ -3,6 +3,7 @@ const path = require('path');
 const app = express()
 const cors = require('cors')
 
+
 const db = require("./app/models/index.js");
 db.sequelize
   .authenticate()
