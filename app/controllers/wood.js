@@ -60,7 +60,7 @@ exports.updateWood = async (req, res) => {
     })
 
     await woodToUpdate.save()
-    res.status(201).json(woodHateoas.globalWoodHateoas(woodHateoas.mapWoodsWithHateoasLinks([woodToUpdate])))
+    res.status(200).json(woodHateoas.globalWoodHateoas(woodHateoas.mapWoodsWithHateoasLinks([woodToUpdate])))
   } catch (e) {
     res.status(500).json(woodHateoas.globalWoodHateoas(e.message))
   }
