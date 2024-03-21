@@ -1,26 +1,29 @@
 const { parse } = require('dotenv')
 const { Wood } = require('../models')
 const fs = require('fs')
+const woodHateoas = require('../utils/woodHateoas')
 
 exports.readWoods = async (req, res) => {
+  console.log(woodHateoas)
   try {
-    const woods = await Wood.findAll()
-    res.status(200).json(woods)
+    let woods = await Wood.findAll()
+    res.status(200).json(woodHateoas.globalWoodHateoas(woodHateoas.mapWoodsWithHateoasLinks(woods)))
   } catch (e) {
-    res.status(400).json(e)
+    res.status(400).json(woodHateoas.globalWoodHateoas(e.message))
   }
 }
 
 exports.readWoodsByHardness = async (req, res) => {
   try {
-    const woods = await Wood.findAll({
+    let woods = await Wood.findAll({
       where: {
         hardness: req.params.hardness
       }
     })
-    res.status(200).send(woods)
+
+    res.status(200).send(woodHateoas.globalWoodHateoas(woodHateoas.mapWoodsWithHateoasLinks(woods)))
   } catch (e) {
-    res.status(400).json(e)
+    res.status(400).json(woodHateoas.globalWoodHateoas(e.message))
   }
 }
 
@@ -31,9 +34,10 @@ exports.createWood = async (req, res) => {
       ...JSON.parse(req.body.datas),
       image: pathname,
     })
-    res.status(201).json(newWood)
+
+    res.status(201).json(woodHateoas.globalWoodHateoas(woodHateoas.mapWoodsWithHateoasLinks([newWood])))
   } catch (e) {
-    res.status(500).json(e)
+    res.status(500).json(woodHateoas.globalWoodHateoas(e))
   }
 }
 
@@ -56,8 +60,8 @@ exports.updateWood = async (req, res) => {
     })
 
     await woodToUpdate.save()
-    res.status(201).json(woodToUpdate)
+    res.status(201).json(woodHateoas.globalWoodHateoas(woodHateoas.mapWoodsWithHateoasLinks([woodToUpdate])))
   } catch (e) {
-    res.status(500).json(e)
+    res.status(500).json(woodHateoas.globalWoodHateoas(e.message))
   }
 }
