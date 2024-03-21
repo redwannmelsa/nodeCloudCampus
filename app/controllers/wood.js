@@ -38,3 +38,35 @@ exports.updateWood = async (req, res) => {
     res.status(500).json(e)
   }
 }
+
+exports.createWood = async (req, res) => {
+  try {
+    console.log(req.body.datas)
+    console.log(req.file)
+    const pathname = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+    const newWood = await Wood.create({
+      ...JSON.parse(req.body.datas),
+      image: pathname,
+    })
+    res.status(201).json(newWood)
+  } catch (e) {
+    res.status(500).json(e)
+  }
+}
+
+exports.updateWood = async (req, res) => {
+  try {
+    const woodToUpdate = await Wood.findOne({ where: { id: req.params.id } })
+
+    woodToUpdate.set({
+      ...req.body
+    })
+
+    console.log(woodToUpdate)
+
+    await woodToUpdate.save()
+    res.status(201).json(woodToUpdate)
+  } catch (e) {
+    res.status(500).json(e)
+  }
+}
