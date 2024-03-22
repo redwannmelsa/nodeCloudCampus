@@ -1,0 +1,255 @@
+openapi: 3.0.0
+info:
+  title: cours
+  version: 1.0.0
+paths:
+  /api/auth/login:
+    post:
+      summary: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jwt:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/auth/signup:
+    post:
+      summary: sign up
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/woods/:
+    get:
+      summary: list woods
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Wood'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/woods/listWoods:
+    get:
+      summary: list woods by hardness
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                datas:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Wood'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/woods/createWood:
+    post:
+      summary: create wood
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                datas:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Wood created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wood'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/woods/2:
+    patch:
+      summary: update wood
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Wood updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wood'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /api/woods/1:
+    delete:
+      summary: delete wood
+      responses:
+        '200':
+          description: Wood deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Wood not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: The first name of the user.
+        lastName:
+          type: string
+          description: The last name of the user.
+        email:
+          type: string
+          format: email
+          description: The email address of the user.
+        password:
+          type: string
+          description: The password of the user.
+
+    Wood:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the wood.
+        type:
+          type: string
+          enum: 
+            - softwood
+            - exotic wood
+            - noble and hardwoods
+          description: The type of the wood.
+        hardness:
+          type: string
+          enum: 
+            - tender
+            - medium-hard
+            - hard
+          description: The hardness of the wood.
+        image:
+          type: string
+          nullable: true
+          description: The image URL associated with the wood.

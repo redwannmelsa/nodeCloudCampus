@@ -2,7 +2,9 @@ const express = require('express')
 const path = require('path');
 const app = express()
 const cors = require('cors')
-
+const swaggerUi = require('swagger-ui-express');
+YAML = require('yamljs');
+swaggerDocument = YAML.load('./swagger.yaml');
 
 const db = require("./app/models/index.js");
 db.sequelize
@@ -23,5 +25,7 @@ const router = require("./app/routes/index.js");
 //Ajout des routes
 app.use("/api", router);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+router.use('/api-docs', swaggerUi.serve);
+router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 module.exports = app;
