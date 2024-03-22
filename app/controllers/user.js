@@ -1,6 +1,8 @@
 const { User } = require('../models')
 require('dotenv').config
 
+const hateoasCtrl = require('./hateoasController')
+
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -14,9 +16,9 @@ exports.createUser = async (req, res) => {
       email: req.body.email,
       password: await bcrypt.hash(req.body.password, saltRounds)
     })
-    res.status(201).json(newUser)
+    res.status(201).json(hateoasCtrl.hateoasify(newUser))
   } catch (e) {
-    res.status(500).json(e)
+    res.status(500).json(hateoasCtrl.hateoasify(e))
   }
 }
 
@@ -25,15 +27,15 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ where: { email: req.body.email } });
 
     if (user == null) {
-      res.status(404).json({
+      res.status(404).json(hateoasCtrl.hateoasify({
         error: 'User not found'
-      })
+      }))
     } else {
       const valid = await bcrypt.compare(req.body.password, user.password)
       if (!valid) {
-        res.status(401).json({ error: 'Wrong password' })
+        res.status(401).json(hateoasCtrl.hateoasify({ error: 'Wrong password' }))
       } else {
-        res.status(200).json({
+        res.status(200).json(hateoasCtrl.hateoasify({
           jwt: jwt.sign(
             {
               firstName: user.firstName,
@@ -41,10 +43,10 @@ exports.login = async (req, res) => {
               email: user.email,
             },
             process.env.TOKEN_SECRET)
-        })
+        }))
       }
     }
   } catch (e) {
-    res.status(500).json(e)
+    res.status(500).json(hateoasCtrl.hateoasify(e))
   }
 }

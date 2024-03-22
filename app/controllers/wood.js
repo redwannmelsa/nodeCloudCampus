@@ -1,26 +1,30 @@
 const { parse } = require('dotenv')
 const { Wood } = require('../models')
 const fs = require('fs')
+const woodHateoas = require('../utils/woodHateoas')
+const utils = require('../utils/utils')
 
 exports.readWoods = async (req, res) => {
+  console.log(woodHateoas)
   try {
-    const woods = await Wood.findAll()
-    res.status(200).json(woods)
+    let woods = await Wood.findAll()
+    res.status(200).json(woodHateoas.globalWoodHateoas(woodHateoas.mapWoodsWithHateoasLinks(woods)))
   } catch (e) {
-    res.status(400).json(e)
+    res.status(500).json({ error: e.message })
   }
 }
 
 exports.readWoodsByHardness = async (req, res) => {
   try {
-    const woods = await Wood.findAll({
+    let woods = await Wood.findAll({
       where: {
         hardness: req.params.hardness
       }
     })
-    res.status(200).send(woods)
+
+    res.status(200).send(woodHateoas.globalWoodHateoas(woodHateoas.mapWoodsWithHateoasLinks(woods)))
   } catch (e) {
-    res.status(400).json(e)
+    res.status(500).json({ error: e.message })
   }
 }
 
@@ -31,9 +35,10 @@ exports.createWood = async (req, res) => {
       ...JSON.parse(req.body.datas),
       image: pathname,
     })
-    res.status(201).json(newWood)
+
+    res.status(201).json(woodHateoas.mapWoodsWithHateoasLinks([newWood]))
   } catch (e) {
-    res.status(500).json(e)
+    res.status(500).json({ error: e.message })
   }
 }
 
@@ -44,10 +49,7 @@ exports.updateWood = async (req, res) => {
 
     if (req.file != null) {
       newPathName = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
-      if (woodToUpdate.image != null) {
-        console.log(woodToUpdate.image.match(/[^\/]+$/)[0])
-        fs.unlink('uploads/' + woodToUpdate.image.match(/[^\/]+$/)[0], err => { if (err) console.log(err) })
-      }
+      utils.deleteImageIfNeeded(woodToUpdate)
     }
 
     woodToUpdate.set({
@@ -56,9 +58,9 @@ exports.updateWood = async (req, res) => {
     })
 
     await woodToUpdate.save()
-    res.status(201).json(woodToUpdate)
+    res.status(200).json(woodHateoas.mapWoodsWithHateoasLinks([woodToUpdate]))
   } catch (e) {
-    res.status(500).json(e)
+    res.status(500).json({ error: e.message })
   }
 }
 
@@ -69,16 +71,12 @@ exports.deleteWood = async (req, res) => {
     if (woodToDelete == null) {
       res.status(404).json({ error: 'wood not found' })
     } else {
-
-      if (woodToDelete.image != null) {
-        fs.unlink('uploads/' + woodToDelete.image.match(/[^\/]+$/)[0], err => console.log(err))
-      }
-
+      utils.deleteImageIfNeeded(woodToDelete)
       await woodToDelete.destroy()
-      res.status(200).json({ message: 'wood has been deleted' })
+      res.status(204).send()
     }
 
   } catch (e) {
-    res.status(500).json(e)
+    res.status(500).json({ error: e.message })
   }
 }
